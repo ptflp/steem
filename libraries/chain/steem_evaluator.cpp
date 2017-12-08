@@ -276,8 +276,10 @@ void account_create_evaluator::do_apply( const account_create_operation& o )
 
       if( !_db.has_hardfork( STEEM_HARDFORK_0_11__169 ) )
          acc.recovery_account = "steem";
-      else
+      else if( o.creator != STEEM_TEMP_ACCOUNT || !_db.has_hardfork( STEEM_HARDFORK_0_20__1782 ) )
          acc.recovery_account = o.creator;
+
+      FC_TODO( "If after HF 20, there are no temp account recoveries, the HF check can be removed." )
 
 
       #ifndef IS_LOW_MEM
@@ -358,7 +360,9 @@ void account_create_with_delegation_evaluator::do_apply( const account_create_wi
       acc.last_vote_time = props.time;
       acc.mined = false;
 
-      acc.recovery_account = o.creator;
+      FC_TODO( "If after HF 20, there are no temp account recoveries, the HF check can be removed." )
+      if( o.creator != STEEM_TEMP_ACCOUNT || !_db.has_hardfork( STEEM_HARDFORK_0_20__1782 ) )
+         acc.recovery_account = o.creator;
 
       acc.received_vesting_shares = o.delegation;
 
@@ -1919,7 +1923,11 @@ void request_account_recovery_evaluator::do_apply( const request_account_recover
    const auto& account_to_recover = _db.get_account( o.account_to_recover );
 
    if ( account_to_recover.recovery_account.length() )   // Make sure recovery matches expected recovery account
+   {
       FC_ASSERT( account_to_recover.recovery_account == o.recovery_account, "Cannot recover an account that does not have you as there recovery partner." );
+      if( o.recovery_account == STEEM_TEMP_ACCOUNT )
+         wlog( "Recovery by temp account" );
+   }
    else                                                  // Empty string recovery account defaults to top witness
       FC_ASSERT( _db.get_index< witness_index >().indices().get< by_vote_name >().begin()->owner == o.recovery_account, "Top witness must recover an account with no recovery partner." );
 
