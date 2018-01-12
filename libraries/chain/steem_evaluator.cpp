@@ -274,10 +274,17 @@ void account_create_evaluator::do_apply( const account_create_operation& o )
       acc.last_vote_time = props.time;
       acc.mined = false;
 
-      if( !_db.has_hardfork( STEEM_HARDFORK_0_11__169 ) )
+      if( _db.has_hardfork( STEEM_HARDFORK_0_11 ) )
+      {
+         if( !_db.has_hardfork( STEEM_HARDFORK_0_20__1782 ) || o.creator != STEEM_TEMP_ACCOUNT )
+         {
+            acc.recovery_account = o.creator;
+         }
+      }
+      else
+      {
          acc.recovery_account = "steem";
-      else if( o.creator != STEEM_TEMP_ACCOUNT || !_db.has_hardfork( STEEM_HARDFORK_0_20__1782 ) )
-         acc.recovery_account = o.creator;
+      }
 
       FC_TODO( "If after HF 20, there are no temp account recoveries, the HF check can be removed." )
 
