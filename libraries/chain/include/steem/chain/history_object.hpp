@@ -150,6 +150,8 @@ namespace steem { namespace chain {
 FC_REFLECT( steem::chain::operation_object, (id)(trx_id)(block)(trx_in_block)(timestamp)(serialized_op) )
 CHAINBASE_SET_INDEX_TYPE( steem::chain::operation_object, steem::chain::operation_index )
 
+FC_REFLECT(chainbase::oid<steem::chain::operation_object>, (_id))
+
 FC_REFLECT( steem::chain::account_history_object, (id)(account)(associated_ops) )
 CHAINBASE_SET_INDEX_TYPE( steem::chain::account_history_object, steem::chain::account_history_index )
 
