@@ -22,7 +22,7 @@ class dumper
       static std::unique_ptr< dumper > self;
 
       dumper() :
-#if ENABLE_STD_ALLOCATOR == 1
+#ifdef ENABLE_STD_ALLOCATOR
       f( "std_dumped_objects.txt" )
 #else
       f( "bip_dumped_objects.txt" )

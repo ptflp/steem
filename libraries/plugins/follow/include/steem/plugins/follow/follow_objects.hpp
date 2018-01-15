@@ -8,9 +8,7 @@ namespace steem { namespace plugins { namespace follow {
 using namespace std;
 using namespace steem::chain;
 
-//using chainbase::t_vector;  //Only when std::allocator is introduced.
-template<typename T>
-using t_vector = chainbase::shared_vector< T >;//This will be removed, when std::allocator will be introduced.
+using chainbase::t_vector;
 
 #ifndef STEEM_FOLLOW_SPACE_ID
 #define STEEM_FOLLOW_SPACE_ID 8
