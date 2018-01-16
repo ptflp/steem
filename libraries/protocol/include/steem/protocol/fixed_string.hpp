@@ -63,10 +63,12 @@ namespace steem { namespace protocol {
  *
  * The string will serialize the same way as std::string for variant and raw formats.
  */
-template< typename Storage >
+template< typename _Storage >
 class fixed_string
 {
    public:
+      typedef _Storage Storage;
+      
       fixed_string(){}
       fixed_string( const fixed_string& c ) : data( c.data ){}
       fixed_string( const char* str ) : fixed_string( std::string( str ) ) {}
